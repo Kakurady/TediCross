@@ -77,6 +77,7 @@ function setup(logger, tgBot, dcBot, messageMap, bridgeMap, settings) {
 			// Apply middlewares and endwares
 			tgBot.use(middlewares.addTediCrossObj);
 			tgBot.use(middlewares.addMessageObj);
+			tgBot.use(middlewares.detachPinnedMessage);
 			tgBot.use(middlewares.addMessageId);
 			tgBot.command("chatinfo", endwares.chatinfo);
 			tgBot.use(middlewares.addBridgesToContext);

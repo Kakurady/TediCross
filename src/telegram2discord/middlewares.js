@@ -167,6 +167,21 @@ function addMessageObj(ctx, next) {
 }
 
 /**
+ * 
+ * @param {*} ctx 
+ * @param {*} next 
+ */
+function detachPinnedMessage(ctx, next) {
+	if (ctx.tediCross.message.pinned_message) {
+		const pinned_message = ctx.tediCross.message.pinned_message;
+		const pin_by = ctx.tediCross.message.from;
+		ctx.tediCross.message = pinned_message;
+		ctx.tediCross.pin_by = pin_by;
+	}
+	next();
+}
+
+/**
  * Adds the message ID as a prop to the tedicross context
  *
  * @param {Object} ctx	The Telegraf context
@@ -636,6 +651,7 @@ function addPreparedObj(ctx, next) {
 module.exports = {
 	addTediCrossObj,
 	addMessageObj,
+	detachPinnedMessage,
 	addMessageId,
 	addBridgesToContext,
 	removeD2TBridges,
@@ -650,5 +666,5 @@ module.exports = {
 	addTextObj,
 	addFileObj,
 	addFileStream,
-	addPreparedObj
+	addPreparedObj,
 };
