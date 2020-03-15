@@ -87,6 +87,7 @@ function setup(logger, tgBot, dcBot, messageMap, bridgeMap, settings) {
 			tgBot.on("left_chat_member", middlewares.removeBridgesIgnoringLeaveMessages);
 			tgBot.on("new_chat_members", endwares.newChatMembers);
 			tgBot.on("left_chat_member", endwares.leftChatMember);
+			tgBot.use(middlewares.testMiddleware);
 			tgBot.use(middlewares.addFromObj);
 			tgBot.use(middlewares.addReplyObj);
 			tgBot.use(middlewares.addForwardFrom);

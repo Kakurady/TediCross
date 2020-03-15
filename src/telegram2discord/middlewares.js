@@ -262,6 +262,21 @@ function removeBridgesIgnoringLeaveMessages(ctx, next) {
 }
 
 /**
+ *
+ * @param {Object} ctx	The Telegraf context to use
+ * @param {Object} ctx.tediCross	The TediCross object on the context
+ * @param {Bridge[]} ctx.tediCross.bridges	The bridges the message could use
+ * @param {Function} next	Function to pass control to next middleware
+ *
+ * @returns {undefined}
+ */
+function testMiddleware(ctx, next) {
+	const {updateType, updateSubTypes, "tediCross":{ message, editedMessage, messageId }} = {...ctx};
+	ctx.TediCross.logger.debug({updateType, updateSubTypes, message, editedMessage, messageId});
+	next();
+}
+
+/**
  * Replies to the message telling the user this is a private bot if there are no bridges on the tediCross context
  *
  * @param {Object} ctx	The Telegraf context
@@ -627,6 +642,7 @@ module.exports = {
 	removeBridgesIgnoringCommands,
 	removeBridgesIgnoringJoinMessages,
 	removeBridgesIgnoringLeaveMessages,
+	testMiddleware,
 	informThisIsPrivateBot,
 	addFromObj,
 	addReplyObj,
