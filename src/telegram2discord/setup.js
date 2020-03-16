@@ -90,6 +90,7 @@ function setup(logger, tgBot, dcBot, messageMap, bridgeMap, settings) {
 			tgBot.on("left_chat_member", endwares.leftChatMember);
 			tgBot.use(middlewares.testMiddleware);
 			tgBot.use(middlewares.removeBridgesWantingPinnedOnly);
+			tgBot.use(middlewares.removeBridgesNotWantingPins);
 			tgBot.use(middlewares.addFromObj);
 			tgBot.use(middlewares.addReplyObj);
 			tgBot.use(middlewares.addForwardFrom);
