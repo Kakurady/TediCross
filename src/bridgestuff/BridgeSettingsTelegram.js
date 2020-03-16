@@ -60,6 +60,13 @@ class BridgeSettingsTelegram {
 		 * @type {Boolean}
 		 */
 		this.relayCommands = settings.relayCommands;
+
+		/**
+		 * Whether or not to forward only pinned messages
+		 *
+		 * @type {Boolean}
+		 */
+		this.pinnedOnly = Boolean(settings.pinnedOnly);
 	}
 
 	/**

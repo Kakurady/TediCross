@@ -89,6 +89,7 @@ function setup(logger, tgBot, dcBot, messageMap, bridgeMap, settings) {
 			tgBot.on("new_chat_members", endwares.newChatMembers);
 			tgBot.on("left_chat_member", endwares.leftChatMember);
 			tgBot.use(middlewares.testMiddleware);
+			tgBot.use(middlewares.removeBridgesWantingPinnedOnly);
 			tgBot.use(middlewares.addFromObj);
 			tgBot.use(middlewares.addReplyObj);
 			tgBot.use(middlewares.addForwardFrom);
@@ -96,7 +97,7 @@ function setup(logger, tgBot, dcBot, messageMap, bridgeMap, settings) {
 			tgBot.use(middlewares.addFileObj);
 			tgBot.use(middlewares.addFileStream);
 			tgBot.use(middlewares.addPreparedObj);
-
+			
 			// Apply endwares
 			tgBot.on(["edited_message", "edited_channel_post"], endwares.handleEdits);
 			tgBot.use(endwares.relayMessage);

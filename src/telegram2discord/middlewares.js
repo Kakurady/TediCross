@@ -277,6 +277,39 @@ function removeBridgesIgnoringLeaveMessages(ctx, next) {
 }
 
 /**
+ * Removes bridges with `telegram.relayLeaveMessages === false` 
+ *
+ * @param {Object} ctx	The Telegraf context to use
+ * @param {Object} ctx.tediCross	The TediCross object on the context
+ * @param {Bridge[]} ctx.tediCross.bridges	The bridges the message could use
+ * @param {Function} next	Function to pass control to next middleware
+ *
+ * @returns {undefined}
+ */
+function removeBridgesWantingPinnedOnly(ctx, next) {
+	ctx.TediCross.logger.debug(Array.isArray(ctx.updateSubTypes), ctx.updateSubTypes.some(x => x == "pinned_message"));
+	const enableFilter = (()=>{
+		if (ctx.updateType == "edited_message") {
+			// let edits through
+			return false;
+		}
+		if (Array.isArray(ctx.updateSubTypes)){
+			// search the array for an element equivalent to "pinned_message"
+			if (!ctx.updateSubTypes.some(x => x == "pinned_message")){
+				// there isn't one; this isn't a pin action, go and filter out bridges that want only pins
+				return true;
+			}
+		}
+		return false;
+	})();
+	if (enableFilter) {
+		ctx.TediCross.logger.debug("removing bridges!");
+		ctx.tediCross.bridges = R.filter(R.complement(R.path(["telegram", "pinnedOnly"])), ctx.tediCross.bridges);
+	}
+	next();
+}
+
+/**
  *
  * @param {Object} ctx	The Telegraf context to use
  * @param {Object} ctx.tediCross	The TediCross object on the context
@@ -658,6 +691,7 @@ module.exports = {
 	removeBridgesIgnoringCommands,
 	removeBridgesIgnoringJoinMessages,
 	removeBridgesIgnoringLeaveMessages,
+	removeBridgesWantingPinnedOnly,
 	testMiddleware,
 	informThisIsPrivateBot,
 	addFromObj,
