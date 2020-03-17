@@ -210,6 +210,7 @@ function addMessageId(ctx, next) {
  */
 function addBridgesToContext(ctx, next) {
 	ctx.tediCross.bridges = ctx.TediCross.bridgeMap.fromTelegramChatId(ctx.tediCross.message.chat.id);
+	ctx.TediCross.logger.debug(`found ${ctx.tediCross.bridges.length} bridges`);
 	next();
 }
 
@@ -367,6 +368,18 @@ function testMiddleware(ctx, next) {
  * @returns {undefined}
  */
 function informThisIsPrivateBot(ctx, next) {
+	if (!(ctx.message && ctx.message.chat) ) {
+		// no message - probably a channel
+		ctx.TediCross.logger.debug("probably a channel");
+		
+		if (ctx.tediCross && Array.isArray(ctx.tediCross.bridges) && (ctx.tediCross.bridges.length > 0))
+		{
+			ctx.TediCross.logger.debug("still bridges");
+			// there are still bridges
+			next();
+		}
+		return;
+	}
 	R.ifElse(
 		// If there are no bridges
 		R.compose(

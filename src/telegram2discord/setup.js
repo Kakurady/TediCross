@@ -80,6 +80,7 @@ function setup(logger, tgBot, dcBot, messageMap, bridgeMap, settings) {
 			tgBot.use(middlewares.detachPinnedMessage);
 			tgBot.use(middlewares.addMessageId);
 			tgBot.command("chatinfo", endwares.chatinfo);
+			tgBot.use(middlewares.testMiddleware);
 			tgBot.use(middlewares.addBridgesToContext);
 			tgBot.use(middlewares.informThisIsPrivateBot);
 			tgBot.use(middlewares.removeD2TBridges);
@@ -88,7 +89,6 @@ function setup(logger, tgBot, dcBot, messageMap, bridgeMap, settings) {
 			tgBot.on("left_chat_member", middlewares.removeBridgesIgnoringLeaveMessages);
 			tgBot.on("new_chat_members", endwares.newChatMembers);
 			tgBot.on("left_chat_member", endwares.leftChatMember);
-			tgBot.use(middlewares.testMiddleware);
 			tgBot.use(middlewares.removeBridgesWantingPinnedOnly);
 			tgBot.use(middlewares.removeBridgesNotWantingPins);
 			tgBot.use(middlewares.addFromObj);
