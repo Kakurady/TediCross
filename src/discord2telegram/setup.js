@@ -232,6 +232,7 @@ function setup(logger, dcBot, tgBot, messageMap, bridgeMap, settings, datadirPat
 				}
 			});
 		} else if (R.isNil(message.channel.guild) || !knownServerIds.has(message.channel.guild.id)) {	// Check if it is the correct server
+			logger.debug(`Message from the wrong server: ${message.channel && message.channel.guild && message.channel.guild.id}`);
 			// The message is from the wrong chat. Inform the sender that this is a private bot, if they have not been informed the last minute
 			if (!antiInfoSpamSet.has(message.channel.id)) {
 				antiInfoSpamSet.add(message.channel.id);
@@ -410,7 +411,8 @@ function setup(logger, dcBot, tgBot, messageMap, bridgeMap, settings, datadirPat
 				// Get the bridges
 				R.prop("bridges")
 			)(bridgeMap);
-
+			
+			logger.debug("known server ids:", [...knownServerIds]);
 			// Mark the bot as ready
 			resolve();
 		});
